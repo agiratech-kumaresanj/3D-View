@@ -1,0 +1,62 @@
+.button {
+    text-align: center;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    background-color: #111;
+    color: #eee;
+    line-height: 40px;
+    font-size: .7em;
+    -webkit-transition: background-color .2s linear;
+    -moz-transition: background-color .2s linear;
+    -ms-transition: background-color .2s linear;
+    -o-transition: background-color .2s linear;
+    transition: background-color .2s linear;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -o-border-radius: 20px;
+    -ms-border-radius: 20px;
+    border-radius: 20px;
+}
+
+/*div {
+    display: block;
+}*/
+/*Inherited from div#toolBarBottom*/
+
+
+.show {
+position: absolute;
+left: 250px;
+top: 200px;
+background-color: #f1f1f1;
+width: 280px;
+padding: 10px;
+color: black;
+border: #0000cc 2px dashed;
+display: none;
+}
+.rightFix {
+    float: right;
+    width: 85%;
+
+}
+.leftFix{
+    float: left;
+    width: 15%;
+    size: 500;
+    /*display: block;*/
+}
+
+element.style {
+    transform: translate(5px, 260px);
+    visibility: visible;
+    opacity: 1;
+}
+.verticalLine {
+    border-left: thick solid #ff0000;
+}
+.ver {
+ width:1;
+ size:500;
+}

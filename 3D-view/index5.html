@@ -1,0 +1,160 @@
+<html>
+    <body>
+
+    <script src="three.js"></script>
+    <script src="three.min.js"></script>
+    <script src="OBJLoader.js"></script>
+    <script src="MTLLoader.js"></script>
+    <script src="OrbitControls.js"></script>
+
+    <script>
+        var color = 0x000000;
+
+        // Create your main scene
+        var scene = new THREE.Scene();
+
+        // Create your main camera
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        // Create lights
+        var light = new THREE.PointLight(0xEEEEEE);
+        light.position.set(20, 0, 20);
+        scene.add(light);
+
+        var lightAmb = new THREE.AmbientLight(0x777777);
+        scene.add(lightAmb);
+
+        // Create your renderer
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create a cube
+        var geometry = new THREE.BoxGeometry(1, 1, 1);
+        var material = new THREE.MeshLambertMaterial({
+            color: 0xff00ff,
+            ambient: 0x121212,
+            emissive: 0x121212
+         });
+
+        // var cube = new THREE.Mesh(geometry, material);
+        // scene.add(cube);
+
+        // Set up the main camera
+        camera.position.z = 5;
+
+        // Load the background texture
+        // var texture = THREE.ImageUtils.loadTexture( 'room-1.png' );
+        // var backgroundMesh = new THREE.Mesh(
+        //     new THREE.PlaneGeometry(2, 2, 2),
+        //     new THREE.MeshBasicMaterial({
+        //         map: texture
+        //     }));
+
+        var textureLoader = new THREE.TextureLoader();
+
+        textureLoader.load( 'textures/2294472375_24a3b8ef46_o.jpg', function ( texture ) {
+
+        texture.mapping = THREE.UVMapping;
+
+        init( texture );
+        animate();
+
+        } );
+
+        backgroundMesh .material.depthTest = false;
+        backgroundMesh .material.depthWrite = false;
+
+        // Create your background scene
+        var backgroundScene = new THREE.Scene();
+        var backgroundCamera = new THREE.Camera();
+        backgroundScene .add(backgroundCamera );
+        backgroundScene .add(backgroundMesh );
+
+        //model
+//1 eg.
+        var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.setBaseUrl('assets/chair/');
+            mtlLoader.setPath('assets/chair/');
+            mtlLoader.load('chair.mtl', function (materials) {
+
+                materials.preload();
+
+                materials.materials.fusta_taula.map.magFilter = THREE.NearestFilter;
+                materials.materials.fusta_taula.map.minFilter = THREE.LinearFilter;
+
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.setPath('assets/chair/');
+                objLoader.load('chair.obj', function (object) {
+                    object.position.x = -3;
+                    object.position.y = -2;
+                    object.position.z = 2.3;
+                    object.scale.set(1,1,1);
+
+                    scene.add(object);
+
+                });
+                // objLoader.position.set(10,0,0);
+
+            });
+//2 eg:
+                //model
+        var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.setBaseUrl('assets/bed/');
+            mtlLoader.setPath('assets/bed/');
+            mtlLoader.load('juniorBed.mtl', function (materials) {
+
+                materials.preload();
+
+                materials.materials.Wood.map.magFilter = THREE.NearestFilter;
+                materials.materials.Wood.map.minFilter = THREE.LinearFilter;
+
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.setPath('assets/bed/');
+                objLoader.load('juniorBed.obj', function (object) {
+                    object.position.x = -20;
+                    object.position.y = -95;
+                    object.position.z = -250;
+                    object.scale.set(1,1,1);
+
+                    scene.add(object);
+
+                });
+                // objLoader.position.set(10,0,0);
+
+            });
+        //renderer
+
+        //controler
+
+        controls = new THREE.OrbitControls(camera);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.25;
+        controls.enableZoom = true;
+
+        // Rendering function
+        var render = function () {
+            requestAnimationFrame(render);
+
+            // Update the color to set
+            if (color < 0xdddddd) color += 0x0000ff;
+
+            // Update the cube color
+            // cube.material.color.setHex(color);
+
+            // Update the cube rotations
+            // cube.rotation.x += 0.05;
+            // cube.rotation.y += 0.02;
+
+            renderer.autoClear = false;
+            renderer.clear();
+            renderer.render(backgroundScene , backgroundCamera );
+            renderer.render(scene, camera);
+       };
+
+       render();
+   </script>
+   </body>
+</html>

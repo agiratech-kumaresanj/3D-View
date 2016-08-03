@@ -1,0 +1,278 @@
+<html>
+    <body>
+
+    <script src="three.js"></script>
+    <!-- <script src="three.min.js"></script> -->
+
+    <script src="OBJLoader.js"></script>
+    <script src="MTLLoader.js"></script>
+    <script src="OrbitControls.js"></script>
+
+    <script>
+        var color = 0x000000;
+        var floorSide=1000;
+
+        // Create your main scene
+        var scene = new THREE.Scene();
+
+        // Create your main camera
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        // Create lights
+        var light = new THREE.PointLight(0xEEEEEE);
+        light.position.set(20, 0, 20);
+        scene.add(light);
+
+        var lightAmb = new THREE.AmbientLight(0x777777);
+        scene.add(lightAmb);
+
+        // Create your renderer
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create a cube
+        // var geometry = new THREE.BoxGeometry(1, 1, 1);
+        // var material = new THREE.MeshLambertMaterial({
+        //     color: 0xff00ff,
+        //     ambient: 0x121212,
+        //     emissive: 0x121212
+        //  });
+
+
+
+
+        // var cube = new THREE.Mesh(geometry, material);
+        // scene.add(cube);
+
+        // Set up the main camera
+        camera.position.z = 100;
+        camera.position.x = 400;
+        camera.position.y = 150;
+
+        // Load the background texture
+        // var texture = THREE.ImageUtils.loadTexture( 'room-1.png' );
+        var backgroundMesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(10, 10, 10),
+            new THREE.MeshBasicMaterial({
+                map: modelHouse()
+                // map:modelHouse()
+            }));
+
+        backgroundMesh .material.depthTest = false;
+        backgroundMesh .material.depthWrite = false;
+
+        // // Create your background scene
+        var backgroundScene = new THREE.Scene();
+        var backgroundCamera = new THREE.Camera();
+        backgroundScene .add(backgroundCamera );
+        backgroundScene .add(backgroundMesh );
+
+        //model
+//1 eg.
+        function modelChair() {
+            var mtlLoaderChair = new THREE.MTLLoader();
+                mtlLoaderChair.setBaseUrl('assets/chair/');
+                mtlLoaderChair.setPath('assets/chair/');
+                mtlLoaderChair.load('chair.mtl', function (materials) {
+
+                materials.preload();
+
+                materials.materials.fusta_taula.map.magFilter = THREE.NearestFilter;
+                materials.materials.fusta_taula.map.minFilter = THREE.LinearFilter;
+
+                var objLoaderChair = new THREE.OBJLoader();
+                objLoaderChair.setMaterials(materials);
+                objLoaderChair.setPath('assets/chair/');
+                objLoaderChair.load('chair.obj', function (object) {
+                    // object.position.x = 0;
+                    // object.position.y = -2;
+                    // object.position.z = 0;
+                    // object.scale.set(1,1,1);
+                    console.log(object)
+                    scene.add(object);
+
+                });
+                // objLoader.position.set(10,0,0);
+
+            });
+        };
+
+//2 eg:
+        //model
+        function modelBad() {
+            // body...
+            var mtlLoaderBed = new THREE.MTLLoader();
+                mtlLoaderBed.setBaseUrl('assets/bed/');
+                mtlLoaderBed.setPath('assets/bed/');
+                mtlLoaderBed.load('juniorBed.mtl', function (materials) {
+
+                    materials.preload();
+
+                    materials.materials.Wood.map.magFilter = THREE.NearestFilter;
+                    materials.materials.Wood.map.minFilter = THREE.LinearFilter;
+
+                    var objLoaderBed = new THREE.OBJLoader();
+                    objLoaderBed.setMaterials(materials);
+                    objLoaderBed.setPath('assets/bed/');
+                    objLoaderBed.load('juniorBed.obj', function (object) {
+                        object.position.x = 35;
+                        object.position.y = -5;
+                        object.position.z = 250;
+                        object.scale.set(1,1,1);
+                        object.rotation.x = .01;
+                        object.rotation.y = -4.7;
+                        scene.add(object);
+
+                    });
+                    // objLoader.position.set(10,0,0);
+
+                });
+        };
+function modelEagle() {
+            // body...
+            var mtlLoaderBed = new THREE.MTLLoader();
+                mtlLoaderBed.setBaseUrl('assets/eagle_1/');
+                mtlLoaderBed.setPath('assets/eagle_1/');
+                mtlLoaderBed.load('EAGLE_1.MTL', function (materials) {
+
+                    materials.preload();
+
+                    materials.materials.eg1_body.map.magFilter = THREE.NearestFilter;
+                    materials.materials.eg1_body.map.minFilter = THREE.LinearFilter;
+
+                    var objLoaderBed = new THREE.OBJLoader();
+                    objLoaderBed.setMaterials(materials);
+                    objLoaderBed.setPath('assets/eagle_1/');
+                    objLoaderBed.load('EAGLE_1.OBJ', function (object) {
+                        // object.position.x = 35;
+                        // object.position.y = -5;
+                        // object.position.z = 250;
+                        // object.scale.set(1,1,1);
+                        // object.rotation.x = .01;
+                        // object.rotation.y = -4.7;
+                        scene.add(object);
+
+                    });
+                    // objLoader.position.set(10,0,0);
+
+                });
+        };
+// 3. eg
+
+    function modelHouse() {
+            var mtlLoader = new THREE.MTLLoader();
+                mtlLoader.setBaseUrl('assets/house/');
+                mtlLoader.setPath('assets/house/');
+                mtlLoader.load('house interior.mtl', function (materials) {
+
+                materials.preload();
+
+                // materials.materials.floor_texture.map.magFilter = THREE.NearestFilter;
+                // materials.materials.floor_texture.map.minFilter = THREE.LinearFilter;
+
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.setPath('assets/house/');
+                objLoader.load('house interior.obj', function (object) {
+                    object.position.x = 0;
+                    object.position.y = -2;
+                    object.position.z = 0;
+                    object.scale.set(1,1,1);
+                    scene.add(object);
+                    // mtlLoader.setBaseUrl('assets/chair/');
+                        // mtlLoader.setPath('assets/chair/');
+                        // mtlLoader.load('chair.mtl', function (materials) {
+
+                        // materials.preload();
+
+                        // materials.materials.fusta_taula.map.magFilter = THREE.NearestFilter;
+                        // materials.materials.fusta_taula.map.minFilter = THREE.LinearFilter;
+                        // var objLoaders = new THREE.OBJLoader();
+                        // // objLoader.setMaterials(materials);
+                        // objLoaders.setPath('assets/chair/');
+                        // objLoaders.load('chair.obj', function (object) {
+                        //     object.position.x = 10;
+                        //     object.position.y = 10;
+                        //     object.position.z = 10;
+                        //     object.scale.set(1,1,1);
+                        //     scene.add(object);
+                        //     // console.log(scene.add(object))
+                        // });
+                        modelBad();
+                        // modelChair()
+                        // modelOfficeChair();
+                        modelEagle();
+
+
+                    });
+
+                });
+                // objLoader.position.set(10,0,0);
+
+            // });
+        };
+// 4.eg
+    function modelOfficeChair() {
+            var mtlLoaderOfficeChair = new THREE.MTLLoader();
+                mtlLoaderOfficeChair.setBaseUrl('assets/office_chair/');
+                mtlLoaderOfficeChair.setPath('assets/office_chair/');
+                mtlLoaderOfficeChair.load('office_chair.mtl', function (materials) {
+
+                materials.preload();
+
+                materials.materials.fusta_taula.map.magFilter = THREE.NearestFilter;
+                materials.materials.fusta_taula.map.minFilter = THREE.LinearFilter;
+
+                var objLoaderOfficeChair = new THREE.OBJLoader();
+                objLoaderOfficeChair.setMaterials(materials);
+                objLoaderOfficeChair.setPath('assets/office_chair/');
+                objLoaderOfficeChair.load('office_chair.obj', function (object) {
+                    // object.position.x = 0;
+                    // object.position.y = -2;
+                    // object.position.z = 0;
+                    // object.scale.set(1,1,1);
+                    console.log(object)
+                    scene.add(object);
+
+                });
+                // objLoader.position.set(10,0,0);
+
+            });
+        }
+        //renderer
+        // var faceMat = new THREE.MeshBasicMaterial({color: 'blue',side: THREE.DoubleSide});
+        // var wireMat = new THREE.MeshBasicMaterial({color:'red',wireframe:true,transparent:true});
+        // var multiMat = [wireMat,faceMat];
+
+        // var floor= THREE.SceneUtils.createMultiMaterialObject(new THREE.PlaneGeometry(floorSide, floorSide, 10, 10),multiMat);
+
+        // floor.rotation.x = Math.PI / 2;
+        // scene.add(floor);
+        contro();
+        // modelOne();
+        // modelBase()
+        //controler
+        function contro(){
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            controls.enableZoom = true;
+            // controls.target.set( 100, 100, 100 );
+        };
+        // Rendering function
+        var render = function () {
+            requestAnimationFrame(render);
+
+            // Update the color to set
+            if (color < 0xdddddd) color += 0x0000ff;
+            renderer.autoClear = false;
+            renderer.clear();
+            renderer.render(backgroundScene , backgroundCamera );
+            renderer.render(scene, camera);
+       };
+
+       render();
+   </script>
+   </body>
+</html>

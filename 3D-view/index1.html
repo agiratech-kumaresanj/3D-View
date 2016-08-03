@@ -1,0 +1,184 @@
+<html>
+    <body>
+    <div id="bottomButton1" class="button" style="left: 105px;"><img src="infopointgui.png"></div>
+    </div>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="three.js"></script>
+    <script src="OBJLoader.js"></script>
+    <script src="MTLLoader.js"></script>
+    <script src="OrbitControls.js"></script>
+
+    <script>
+        var color = 0x000000;
+        var btn;
+        btn = document.createElement("button");
+        document.body.appendChild(btn);
+
+        // Create your main scene
+        var scene = new THREE.Scene();
+
+        // Create your main camera
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        // Create lights
+        var light = new THREE.PointLight(0xEEEEEE);
+        light.position.set(20, 0, 20);
+        scene.add(light);
+
+        var lightAmb = new THREE.AmbientLight(0x777777);
+        scene.add(lightAmb);
+
+        // Create your renderer
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create a cube
+        var geometry = new THREE.BoxGeometry(1, 1, 1);
+        var material = new THREE.MeshLambertMaterial({
+            color: 0xff00ff,
+            ambient: 0x121212,
+            emissive: 0x121212
+         });
+
+        // var cube = new THREE.Mesh(geometry, material);
+        // scene.add(cube);
+
+        // Set up the main camera
+        camera.position.z = 5;
+
+        // Load the background texture
+        var texture = THREE.ImageUtils.loadTexture( 'home.jpg' );
+        var backgroundMesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(2, 2, 2),
+            new THREE.MeshBasicMaterial({
+                map: texture
+            }));
+
+        backgroundMesh .material.depthTest = false;
+        backgroundMesh .material.depthWrite = false;
+
+        // Create your background scene
+        var backgroundScene = new THREE.Scene();
+        var backgroundCamera = new THREE.Camera();
+        backgroundScene .add(backgroundCamera );
+        backgroundScene .add(backgroundMesh );
+
+        //model
+//1 eg.
+        var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.setBaseUrl('assets/chair/');
+            mtlLoader.setPath('assets/chair/');
+            mtlLoader.load('chair.mtl', function (materials) {
+
+                materials.preload();
+
+                materials.materials.fusta_taula.map.magFilter = THREE.NearestFilter;
+                materials.materials.fusta_taula.map.minFilter = THREE.LinearFilter;
+
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.setPath('assets/chair/');
+                objLoader.load('chair.obj', function (object) {
+                    object.position.x = -3;
+                    object.position.y = -2;
+                    object.position.z = 2.3;
+                    object.scale.set(1,1,1);
+
+                    scene.add(object);
+
+                });
+                // objLoader.position.set(10,0,0);
+
+            });
+//2 eg:
+                //model
+        var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.setBaseUrl('assets/bed/');
+            mtlLoader.setPath('assets/bed/');
+            mtlLoader.load('juniorBed.mtl', function (materials) {
+
+                materials.preload();
+
+                materials.materials.Wood.map.magFilter = THREE.NearestFilter;
+                materials.materials.Wood.map.minFilter = THREE.LinearFilter;
+
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.setPath('assets/bed/');
+                objLoader.load('juniorBed.obj', function (object) {
+                    object.position.x = -20;
+                    object.position.y = -95;
+                    object.position.z = -250;
+                    object.scale.set(1,1,1);
+
+                    scene.add(object);
+                    // modelEagle();
+                });
+                // objLoader.position.set(10,0,0);
+
+            });
+// 5 e.g
+function modelEagle() {
+            // body...
+            var mtlLoaderBed = new THREE.MTLLoader();
+                mtlLoaderBed.setBaseUrl('assets/cycle/');
+                mtlLoaderBed.setPath('assets/cycle/');
+                mtlLoaderBed.load('cycle_model_01.mtl', function (materials) {
+
+                    materials.preload();
+
+                    // materials.materials.None.map.magFilter = THREE.NearestFilter;
+                    // materials.materials.None.map.minFilter = THREE.LinearFilter;
+
+                    var objLoaderBed = new THREE.OBJLoader();
+                    objLoaderBed.setMaterials(materials);
+                    objLoaderBed.setPath('assets/cycle/');
+                    objLoaderBed.load('cycle_model_01.obj', function (object) {
+                        // object.position.x = 35;
+                        // object.position.y = -5;
+                        // object.position.z = 250;
+                        // object.scale.set(1,1,1);
+                        // object.rotation.x = .01;
+                        // object.rotation.y = -4.7;
+                        scene.add(object);
+
+                    });
+                    // objLoader.position.set(10,0,0);
+
+                });
+        };
+        //renderer
+
+        //controler
+
+        controls = new THREE.OrbitControls(camera);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.25;
+        controls.enableZoom = true;
+
+        // Rendering function
+        var render = function () {
+            requestAnimationFrame(render);
+
+            // Update the color to set
+            if (color < 0xdddddd) color += 0x0000ff;
+
+            // Update the cube color
+            // cube.material.color.setHex(color);
+
+            // Update the cube rotations
+            // cube.rotation.x += 0.05;
+            // cube.rotation.y += 0.02;
+
+            renderer.autoClear = false;
+            renderer.clear();
+            renderer.render(backgroundScene , backgroundCamera );
+            renderer.render(scene, camera);
+            btn.appendChild(renderer.domElement);
+       };
+
+       render();
+   </script>
+   </body>
+</html>
